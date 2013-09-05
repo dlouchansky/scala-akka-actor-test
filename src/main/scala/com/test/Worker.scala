@@ -16,7 +16,7 @@ object Worker {
     if (n < 1)
       List()
     else {
-      val greeter = sysContext.actorOf(Props[Worker])
+      val greeter = createActor(sysContext)
 
       if (n == 1)
         greeter :: store
