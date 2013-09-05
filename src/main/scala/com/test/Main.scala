@@ -1,7 +1,6 @@
 package com.test
 
 import akka.actor.{Kill, ActorRef, Actor, Props}
-import runtime.{totalMemory, freeMemory, maxMemory}
 import util.Random
 
 object Main {
@@ -32,8 +31,7 @@ class Main extends Actor {
   def getMemoryStats() {
     private val runtime = Runtime.getRuntime()
     import runtime.{ totalMemory, freeMemory, maxMemory }
-
-    System.out.println("Total memory = %s, max memory = %s, free memory = %s".format(totalMemory, maxMemory, freeMemory))
+    println("Total memory = %s, max memory = %s, free memory = %s".format(totalMemory, maxMemory, freeMemory))
   }
 
 }
