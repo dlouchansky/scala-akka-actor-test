@@ -56,6 +56,7 @@ class Worker extends Actor {
 
   def receive = {
     case Worker.Add =>  //todo wait
+      println("ok")
       count = count + 1
     case Worker.Exit =>
       sender ! Main.Done
