@@ -1,38 +1,18 @@
 package com.test
 
-import akka.actor.{Kill, ActorRef, Actor, Props}
-import util.Random
+import akka.actor._
+
+case class Add()
+case class GetCount()
+case class Exit()
+case class Done()
 
 object Main {
-  case object Done
+  val system = ActorSystem("mySystem")
+
+  def main(args: Array[String]) {
+    system.actorOf(Props(classOf[BaseActor], 5000, 50, 50))
+  }
 }
 
-class Main extends Actor {
-
-  var stopped: Int = 0
-
-  override def preStart() {
-    val randomIds: List[Int] = generateRandomActorIds(5, 5)
-    val actors: List[ActorRef] = Worker.createActors(5, context)
-    Worker.sendMessages(randomIds, actors)
-    Worker.killActors(actors)
-  }
-
-  def receive = {
-    case Main.Done ⇒ {
-      stopped = stopped + 1
-    }
-  }
-
-  def generateRandomActorIds(resultCount: Int, actorCount: Int): List[Int] = {
-    List.fill(resultCount)(Random.nextInt(actorCount))
-  }
-  
-  def getMemoryStats() {
-    private val runtime = Runtime.getRuntime()
-    import runtime.{ totalMemory, freeMemory, maxMemory }
-    println("Total memory = %s, max memory = %s, free memory = %s".format(totalMemory, maxMemory, freeMemory))
-  }
-
-}
 
