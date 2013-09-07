@@ -17,7 +17,7 @@ object IOModule {
   }
 
   def outStats(action: String, start: Long, end: Long) {
-
+      println(action + " at " + timeDiff(start, end) + ". Memory usage: ")
   }
 
   def outThroughput(messageCount: Int, start: Long, end: Long) {
@@ -25,7 +25,7 @@ object IOModule {
   }
 
   def testTime(description: String, start: Long, finish: Long) {
-
+      println(description + " took " + timeDiff(start, finish) + " seconds.")
   }
 
   def timeDiff(start: Long, finish: Long): Long =  {

@@ -18,7 +18,7 @@ object ActorModel {
   }
 
   def killActor(actorId: ActorRef) {
-    actorId ! Kill
+    actorId ! Exit
   }
 
   def createActors(n: Int, system: ActorSystem, actorProp: Props): List[ActorRef] = {

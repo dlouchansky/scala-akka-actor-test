@@ -9,8 +9,8 @@ case class Exit()
 
 /* BaseActor message classes */
 case class Done()
-case class OneTest(messageCount: Int, sleepTime: Int)
-case class MultipleTest(actorCount: Int, messageCount: Int, sleepTime: Int)
+case class OneTest(messageCount: Int, sleepTime: Long)
+case class MultipleTest(actorCount: Int, messageCount: Int, sleepTime: Long)
 
 object Main {
   val system = ActorSystem("mySystem")
@@ -18,7 +18,7 @@ object Main {
   def main(args: Array[String]) {
     val actorCount: Int = args(0).toInt
     val messageCount: Int = args(1).toInt
-    val timeout: Int = args(2).toInt
+    val timeout: Long = args(2).toLong
 
     val baseActor: ActorRef = system.actorOf(Props(classOf[BaseActor]))
 

@@ -2,7 +2,7 @@ package com.test
 
 import akka.actor._
 
-class WorkerActor(sleepTime: Int) extends Actor {
+class WorkerActor(sleepTime: Long, parentActor: ActorRef) extends Actor {
   var count: Int = 0
 
   def receive = {
@@ -12,7 +12,8 @@ class WorkerActor(sleepTime: Int) extends Actor {
       count += 1
 
     case Exit =>
-      sender ! Done
+      parentActor ! Done
+      self ! PoisonPill
 
     case GetCount =>
       IOModule.outCounted(count)
