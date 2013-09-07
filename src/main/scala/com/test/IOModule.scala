@@ -16,12 +16,19 @@ object IOModule {
     println("To" + Runtime.getRuntime())
   }
 
+  /*
+outStats(Action, Start, End) ->
+  io:format("~p at ~p. Memory usage: total - ~p KB, processes - ~p KB.~n", [
+Action, diff(Start, End), round(erlang:memory(total) / 1024), round(erlang:memory(processes) / 1024)
+]).
+*/
+
   def outStats(action: String, start: Long, end: Long) {
       println(action + " at " + timeDiff(start, end) + ". Memory usage: ")
   }
 
   def outThroughput(messageCount: Int, start: Long, end: Long) {
-
+    println("Throughput = " + perSec(messageCount, start, end) + " messaged per second.")
   }
 
   def testTime(description: String, start: Long, finish: Long) {
@@ -32,19 +39,9 @@ object IOModule {
        finish - start
   }
 
-  /*
-  outStats(Action, Start, End) ->
-    io:format("~p at ~p. Memory usage: total - ~p KB, processes - ~p KB.~n", [
-  Action, diff(Start, End), round(erlang:memory(total) / 1024), round(erlang:memory(processes) / 1024)
-  ]).
+  def perSec(count: Int, start: Long, end: Long): Long = {
+    count / timeDiff(start, end)
+  }
 
-  outThroughput(Messagecnt, Start, Sent) ->
-    io:format("Throughput = ~p messages per second.~n", [
-  helpers:perSec(Messagecnt, Start, Sent)
-  ]).
 
-  testTime(Desc, Start, Finish) ->
-    io:format("~p took ~p seconds.~n", [
-  Desc, helpers:diff(Start, Finish)
-  ]).*/
 }

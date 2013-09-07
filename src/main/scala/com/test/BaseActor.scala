@@ -48,7 +48,6 @@ class BaseActor extends Actor {
     }
 
     case Done => {
-      println("received")
       stoppedActors += 1
       if (stoppedActors == runningChildActors) {
         val endTime = System.currentTimeMillis()
