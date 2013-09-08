@@ -1,6 +1,7 @@
 package com.test
 
 import akka.actor._
+import io.ConsoleIOModule
 
 /* WorkerActor message classes */
 case class Add()
@@ -20,7 +21,7 @@ object Main {
     val messageCount: Int = args(1).toInt
     val timeout: Long = args(2).toLong
 
-    val baseActor: ActorRef = system.actorOf(Props(classOf[BaseActor]))
+    val baseActor: ActorRef = system.actorOf(Props(classOf[BaseActor], new ConsoleIOModule))
 
     if (actorCount == 1) {
       baseActor ! OneTest(messageCount, timeout)

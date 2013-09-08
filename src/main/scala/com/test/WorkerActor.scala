@@ -1,8 +1,9 @@
 package com.test
 
 import akka.actor._
+import io.{IOModule}
 
-class WorkerActor(sleepTime: Long, parentActor: ActorRef) extends Actor {
+class WorkerActor(sleepTime: Long, parentActor: ActorRef, ioModule: IOModule) extends Actor {
   var count: Int = 0
 
   def receive = {
@@ -16,9 +17,9 @@ class WorkerActor(sleepTime: Long, parentActor: ActorRef) extends Actor {
       self ! PoisonPill
 
     case GetCount =>
-      IOModule.outCounted(count)
+      ioModule.outCounted(count)
 
     case _ =>
-      IOModule.outError("Wrong action sent to WorkerActor")
+      ioModule.outError("Wrong action sent to WorkerActor")
   }
 }
