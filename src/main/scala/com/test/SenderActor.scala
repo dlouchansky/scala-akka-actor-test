@@ -1,51 +1,51 @@
 package com.test
 
-import akka.actor.{PoisonPill, Props, ActorRef, Actor}
-import io.{IOModule}
+import akka.actor.{PoisonPill, ActorRef, Actor}
+import io.IOModule
 
-class BaseActor(ioModule: IOModule) extends Actor {
+class SenderActor(ioModule: IOModule, actorFactory: ChildActorFactory) extends Actor {
   var stoppedActors: Int = 0
   var runningChildActors: Int = 0
   var overallMessageCnt: Int = 0
   var startTime: Long = 0
 
   def receive = {
-    case OneTest(messageCount: Int, sleepTime: Long) => {
+    case OneTest(messageCount: Int) => {
       if (startTime == 0)
         startTime = System.nanoTime()
       ioModule.outStats("Started", startTime, startTime)
 
-      val actor: ActorRef = ActorModel.createActor(Main.system, Props(classOf[WorkerActor], sleepTime, self, ioModule))
+      val actor: ActorRef = actorFactory.createActor(self)
       runningChildActors += 1
 
       overallMessageCnt += messageCount
-      ActorModel.sendMessagesToOne(messageCount, actor)
+      actorFactory.sendMessagesToOne(messageCount, actor)
       val sentTime = System.nanoTime()
       ioModule.outStats("Messages sent", startTime, sentTime)
 
-      ActorModel.killActor(actor)
+      actorFactory.killActor(actor)
     }
 
-    case MultipleTest(actorCount: Int, messageCount: Int, sleepTime: Long) => {
+    case MultipleTest(actorCount: Int, messageCount: Int) => {
       if (startTime == 0)
         startTime = System.nanoTime()
       ioModule.outStats("Started", startTime, startTime)
 
-      val randomIds: List[Int] = ActorModel.generateRandomActorIds(messageCount, actorCount)
+      val randomIds: List[Int] = actorFactory.generateRandomActorIds(messageCount, actorCount)
       val randomDone = System.nanoTime()
       ioModule.outStats("Random list generated", startTime, randomDone)
 
-      val actors: List[ActorRef] = ActorModel.createActors(actorCount, Main.system, Props(classOf[WorkerActor], sleepTime, self, ioModule))
+      val actors: List[ActorRef] = actorFactory.createActors(actorCount, self)
       val actorsCreatedTime = System.nanoTime()
       ioModule.outStats("Actors started", startTime, actorsCreatedTime)
       runningChildActors += actorCount
 
       overallMessageCnt += messageCount
-      ActorModel.sendMessages(randomIds, actors)
+      actorFactory.sendMessages(randomIds, actors)
       val sentTime = System.nanoTime()
       ioModule.outStats("Messages sent", startTime, sentTime)
 
-      ActorModel.killActors(actors)
+      actorFactory.killActors(actors)
     }
 
     case Done => {
@@ -54,7 +54,7 @@ class BaseActor(ioModule: IOModule) extends Actor {
         val endTime = System.nanoTime()
         ioModule.testTime("Overall", startTime, endTime)
         ioModule.outThroughput(overallMessageCnt, startTime, endTime)
-        self ! PoisonPill
+        Main.system.shutdown()
       }
     }
 

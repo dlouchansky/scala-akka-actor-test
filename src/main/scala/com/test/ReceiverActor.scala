@@ -1,9 +1,9 @@
 package com.test
 
 import akka.actor._
-import io.{IOModule}
+import io.IOModule
 
-class WorkerActor(sleepTime: Long, parentActor: ActorRef, ioModule: IOModule) extends Actor {
+class ReceiverActor(sleepTime: Long, parentActor: ActorRef, ioModule: IOModule) extends Actor {
   var count: Int = 0
 
   def receive = {

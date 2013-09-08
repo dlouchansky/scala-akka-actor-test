@@ -3,38 +3,38 @@ package com.test
 import akka.actor._
 import util.Random
 
-object ActorModel {
+trait ChildActorFactory { // is it factory?
 
-  def createActor(system: ActorSystem, actorProp: Props): ActorRef = {
-    system.actorOf(actorProp)
-  }
+  def newActorProp(parentActor: ActorRef): Props
 
-  def sendMessage(actorId: ActorRef) {
-    actorId ! Add
+  def sendMessage(actorId: ActorRef)
+
+  def killActor(actorId: ActorRef)
+
+  def actorSystem(): ActorSystem
+
+  def createActor(parentActor: ActorRef): ActorRef = {
+    actorSystem().actorOf(newActorProp(parentActor))
   }
 
   def killActors(store: List[ActorRef]) {
     store.foreach(actor => killActor(actor))
   }
 
-  def killActor(actorId: ActorRef) {
-    actorId ! Exit
+  def createActors(n: Int, parentActor: ActorRef): List[ActorRef] = {
+    createActors(n, List(), parentActor)
   }
 
-  def createActors(n: Int, system: ActorSystem, actorProp: Props): List[ActorRef] = {
-    createActors(n, List(), system, actorProp)
-  }
-
-  def createActors(n: Int, store: List[ActorRef], system: ActorSystem, actorProp: Props): List[ActorRef] = {
+  def createActors(n: Int, store: List[ActorRef], parentActor: ActorRef): List[ActorRef] = {
     if (n < 1)
       List()
     else {
-      val greeter = createActor(system, actorProp)
+      val greeter = createActor(parentActor)
 
       if (n == 1)
         greeter :: store
       else {
-        createActors(n - 1, greeter :: store, system, actorProp)
+        createActors(n - 1, greeter :: store, parentActor)
       }
     }
   }
