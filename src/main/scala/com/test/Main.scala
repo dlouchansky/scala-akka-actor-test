@@ -22,7 +22,7 @@ object Main {
     val timeout: Long = args(2).toLong
 
     val io: IOModule = new ConsoleIOModule
-    val childActorFactory: ChildActorFactory = new ReceiverActorFactory(timeout, io, system)
+    val childActorFactory: ChildActorService = new ReceiverActorService(timeout, io, system)
     val baseActor: ActorRef = system.actorOf(Props(classOf[SenderActor], io, childActorFactory))
 
     if (actorCount == 1) {

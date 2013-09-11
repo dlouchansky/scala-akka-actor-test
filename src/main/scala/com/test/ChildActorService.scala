@@ -3,7 +3,7 @@ package com.test
 import akka.actor._
 import util.Random
 
-trait ChildActorFactory { // is it factory?
+trait ChildActorService {
 
   def newActorProp(parentActor: ActorRef): Props
 

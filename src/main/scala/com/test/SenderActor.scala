@@ -3,7 +3,7 @@ package com.test
 import akka.actor.{PoisonPill, ActorRef, Actor}
 import io.IOModule
 
-class SenderActor(ioModule: IOModule, actorFactory: ChildActorFactory) extends Actor {
+class SenderActor(ioModule: IOModule, actorFactory: ChildActorService) extends Actor {
   var stoppedActors: Int = 0
   var runningChildActors: Int = 0
   var overallMessageCnt: Int = 0

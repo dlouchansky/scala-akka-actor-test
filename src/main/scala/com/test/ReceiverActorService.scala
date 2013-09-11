@@ -3,7 +3,7 @@ package com.test
 import akka.actor.{ActorSystem, Props, ActorRef}
 import io.IOModule
 
-class ReceiverActorFactory(sleepTime: Long, ioModule: IOModule, _actorSystem: ActorSystem) extends ChildActorFactory {
+class ReceiverActorService(sleepTime: Long, ioModule: IOModule, _actorSystem: ActorSystem) extends ChildActorService {
 
   def sendMessage(actorId: ActorRef) {
     actorId ! Add
